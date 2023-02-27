@@ -1,15 +1,15 @@
-import { ChainIDs } from "./constants/ChainIDs";
+import { ChainIDs } from "./constants";
 
 export const sum = (a: number, b: number) => {
   if ('development' === process.env.NODE_ENV) {
     console.log('boop');
   }
+  let x = 137;
+  console.log((x == (ChainIDs.MUMBAI | ChainIDs.POLYGON)));
+  
   return a + b;
 };
-export const sum1 = (a: ChainIDs, b: ChainIDs) => {
-  return a + b;
-};
 
 
-console.log(sum1(ChainIDs.MAINNET, ChainIDs.GOERLI));
 
+sum(1, 4)
