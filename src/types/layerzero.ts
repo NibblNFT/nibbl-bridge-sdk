@@ -5,7 +5,7 @@ import {
 } from '../constants';
 
 export type LayerZeroSendNFTDTO = {
-  rootToken: string;
+  tokenAddress: string;
   tokenID: BigNumberish;
   to: string;
   srcChainID: LayerZeroRootChainIDType;

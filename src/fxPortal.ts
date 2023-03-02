@@ -3,10 +3,7 @@ import { FxPortalDepositDTO, SignerOrProvider } from './types';
 import { Contract } from 'ethers';
 import { topupGas } from './function';
 import { FxPortalWithdrawDTO } from './types/fxPortal';
-import {
-  FxPortalChildChainIDType,
-  FxPortalRootChainIDType,
-} from './constants/ChainIDs';
+import { FxPortalChildChainIDType, FxPortalRootChainIDType } from './constants';
 import FX_ERC721_ROOT_TUNNEL from './abis/FX_ERC721_ROOT_TUNNEL.json';
 import FX_ERC721_CHILD_TUNNEL from './abis/FX_ERC721_CHILD_TUNNEL.json';
 

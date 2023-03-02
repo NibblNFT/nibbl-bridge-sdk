@@ -6,7 +6,3 @@ export enum ChainIDs {
   MUMBAI = 80001,
   ARBITRUM_GOERLI = 421613,
 }
-
-//
-export type FxPortalRootChainIDType = ChainIDs.MAINNET | ChainIDs.GOERLI;
-export type FxPortalChildChainIDType = ChainIDs.POLYGON | ChainIDs.MUMBAI;

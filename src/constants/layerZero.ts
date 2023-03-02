@@ -1,7 +1,9 @@
 import { ChainIDs } from './ChainIDs';
 
 export type LayerZeroRootChainIDType = ChainIDs.MAINNET | ChainIDs.GOERLI;
-export type LayerZeroChildChainIDType = ChainIDs.ARBITRUM_ONE | ChainIDs.ARBITRUM_GOERLI;
+export type LayerZeroChildChainIDType =
+  | ChainIDs.ARBITRUM_ONE
+  | ChainIDs.ARBITRUM_GOERLI;
 
 export const LzChainIDs: Record<
   LayerZeroRootChainIDType | LayerZeroChildChainIDType,

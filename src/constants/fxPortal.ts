@@ -1,8 +1,12 @@
-import {
-  ChainIDs,
-  FxPortalChildChainIDType,
-  FxPortalRootChainIDType,
-} from './ChainIDs';
+import { ChainIDs } from './ChainIDs';
+
+export type FxPortalRootChainIDType = ChainIDs.MAINNET | ChainIDs.GOERLI;
+export type FxPortalChildChainIDType = ChainIDs.POLYGON | ChainIDs.MUMBAI;
+
+export enum FxPortal_TxType {
+  DEPOSIT,
+  WITHDRAW,
+}
 
 export const FxRootTunnelAddress: Record<FxPortalRootChainIDType, string> = {
   [ChainIDs.MAINNET]: '0x7857a53a3D280775987288cFeaF18b1143137392',

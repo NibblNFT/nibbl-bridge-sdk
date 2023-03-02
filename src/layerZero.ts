@@ -21,7 +21,7 @@ export class LayerZero {
     //
     const onftAddress =
       LAYER_ZERO_ONFT_MAP[layerZeroSendNFTDTO.srcChainID][
-        layerZeroSendNFTDTO.rootToken
+        layerZeroSendNFTDTO.tokenAddress
       ];
     //
     const onftInstance = new Contract(

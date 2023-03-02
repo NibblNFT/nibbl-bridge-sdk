@@ -5,4 +5,10 @@ export {
   LayerZeroRootChainIDType,
   LzChainIDs,
 } from './layerZero';
-export { FxChildTunnelAddress, FxRootTunnelAddress } from './fxPortal';
+
+export {
+  FxChildTunnelAddress,
+  FxRootTunnelAddress,
+  FxPortalChildChainIDType,
+  FxPortalRootChainIDType,
+} from './fxPortal';
