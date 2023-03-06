@@ -26,7 +26,7 @@ export class Bridge {
     tokenID: BigNumberish,
     toAddress: string,
     tokenURI?: string
-  ): Promise<void> {
+  ): Promise<any> {
     //
     if (includesPolygonChainID(srcChainID, dstChainID)) {
       //
@@ -35,7 +35,7 @@ export class Bridge {
         throw new Error('Invalid URI');
       }
       //
-      await this.transferViaFxPortal({
+      return await this.transferViaFxPortal({
         srcChainID: srcChainID as FxPortalChainIDType,
         dstChainID: dstChainID as FxPortalChainIDType,
         tokenAddress,
@@ -45,7 +45,7 @@ export class Bridge {
       });
       //
     } else {
-      this.transferViaLayerZero({
+      return this.transferViaLayerZero({
         dstChainID: dstChainID as LzChainIDType,
         srcChainID: srcChainID as LzChainIDType,
         toAddress,
