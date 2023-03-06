@@ -1,9 +1,17 @@
 import { BigNumberish } from 'ethers';
-import { ChainIDs, FxPortalChildChainIDType, FxPortalRootChainIDType } from './constants';
+import {
+  ChainIDs,
+  FxPortalChildChainIDType,
+  FxPortalRootChainIDType,
+} from './constants';
 import { SignerOrProvider } from './types';
 import { FxPortalERC721 } from './fxPortal';
-import { isArbitrumChainID, isPolygonChainID } from './function';
-import { FxPortal_TxType } from './constants/fxPortal';
+import { includesPolygonChainID } from './function';
+import { FxPortalChainIDType } from './constants/fxPortal';
+import { TransferViaFxPortalDTO } from './types/fxPortal';
+import { LayerZero } from './layerZero';
+import { TransferViaLayerZeroDTO } from './types/layerzero';
+import { LzChainIDType } from './constants/layerZero';
 
 export class Bridge {
   signerOrProvider: SignerOrProvider;
@@ -11,28 +19,79 @@ export class Bridge {
     this.signerOrProvider = _signerOrProvider;
   }
 
-  sendNFT(
+  async sendNFT(
     srcChainID: ChainIDs,
     dstChainID: ChainIDs,
     tokenAddress: string,
     tokenID: BigNumberish,
-    to: string
-  ) {
-    const _srcIsPolygon = isPolygonChainID(srcChainID);
-    const _dstIsPolygon = isPolygonChainID(dstChainID);
-    if (_srcIsPolygon || _dstIsPolygon) {
-      const txType = _srcIsPolygon ? FxPortal_TxType.DEPOSIT : FxPortal_TxType.WITHDRAW;
-      this.transferViaFxPortal(
-        srcChainID as FxPortalRootChainIDType,
-        dstChainID as FxPortalChildChainIDType);
-    }
-    if (isArbitrumChainID(dstChainID) || isArbitrumChainID(srcChainID)) {
-      this.transferViaLayerZero();
+    toAddress: string,
+    tokenURI?: string
+  ): Promise<void> {
+    //
+    if (includesPolygonChainID(srcChainID, dstChainID)) {
+      //
+
+      if (tokenURI === '') {
+        throw new Error('Invalid URI');
+      }
+      //
+      await this.transferViaFxPortal({
+        srcChainID: srcChainID as FxPortalChainIDType,
+        dstChainID: dstChainID as FxPortalChainIDType,
+        tokenAddress,
+        tokenURI: tokenURI!,
+        toAddress,
+        tokenID,
+      });
+      //
+    } else {
+      this.transferViaLayerZero({
+        dstChainID: dstChainID as LzChainIDType,
+        srcChainID: srcChainID as LzChainIDType,
+        toAddress,
+        tokenAddress,
+        tokenID,
+      });
     }
   }
 
-  private transferViaFxPortal(srcChainID: FxPortalRootChainIDType, dstChainID: FxPortalChildChainIDType) {
-      const fxPortal = new FxPortalERC721(srcChainID, dstChainID, this.signerOrProvider);
+  private async transferViaFxPortal(transferData: TransferViaFxPortalDTO) {
+    //
+    if (includesPolygonChainID(transferData.dstChainID)) {
+      //
+      const fxPortal = new FxPortalERC721(
+        transferData.srcChainID as FxPortalRootChainIDType,
+        transferData.dstChainID as FxPortalChildChainIDType,
+        this.signerOrProvider
+      );
+      //
+      return await fxPortal.deposit({
+        rootToken: transferData.tokenAddress,
+        tokenID: transferData.tokenID,
+        tokenURI: transferData.tokenURI,
+        toAddress: transferData.toAddress,
+      });
+      //
+    } else {
+      const fxPortal = new FxPortalERC721(
+        transferData.dstChainID as FxPortalRootChainIDType,
+        transferData.srcChainID as FxPortalChildChainIDType,
+        this.signerOrProvider
+      );
+      return await fxPortal.withdraw({
+        childToken: transferData.tokenAddress,
+        tokenID: transferData.tokenID,
+      });
+    }
   }
-  private transferViaLayerZero() {}
+  private transferViaLayerZero(transferViaLZ: TransferViaLayerZeroDTO): any {
+    const lz = new LayerZero(this.signerOrProvider);
+    return lz.sendNFT({
+      dstChainID: transferViaLZ.dstChainID,
+      srcChainID: transferViaLZ.srcChainID,
+      tokenAddress: transferViaLZ.tokenAddress,
+      tokenID: transferViaLZ.tokenID,
+      to: transferViaLZ.toAddress,
+    });
+  }
 }

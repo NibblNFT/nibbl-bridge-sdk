@@ -5,6 +5,10 @@ export type LayerZeroChildChainIDType =
   | ChainIDs.ARBITRUM_ONE
   | ChainIDs.ARBITRUM_GOERLI;
 
+export type LzChainIDType =
+  | LayerZeroChildChainIDType
+  | LayerZeroRootChainIDType;
+
 export const LzChainIDs: Record<
   LayerZeroRootChainIDType | LayerZeroChildChainIDType,
   number

@@ -14,12 +14,12 @@ export class FxPortalERC721 {
   //
   constructor(
     _rootChainID: FxPortalRootChainIDType,
-    _polygonChainID: FxPortalChildChainIDType,
+    _childChainID: FxPortalChildChainIDType,
     signerOrProvider: SignerOrProvider
   ) {
     //
     const _fxERC721RootTunnelAddress = FxRootTunnelAddress[_rootChainID];
-    const _fxERC721ChildTunnelAddress = FxChildTunnelAddress[_polygonChainID];
+    const _fxERC721ChildTunnelAddress = FxChildTunnelAddress[_childChainID];
     //
     this.rootTunnelContract = new Contract(
       _fxERC721RootTunnelAddress,
@@ -40,7 +40,7 @@ export class FxPortalERC721 {
       const gasLimit = topupGas(
         await this.rootTunnelContract.estimateGas.deposit(
           fxPortalDepositData.rootToken,
-          fxPortalDepositData.user,
+          fxPortalDepositData.toAddress,
           fxPortalDepositData.tokenID,
           fxPortalDepositData.tokenURI,
           '0x'
@@ -49,7 +49,7 @@ export class FxPortalERC721 {
       //
       return await this.rootTunnelContract.deposit(
         fxPortalDepositData.rootToken,
-        fxPortalDepositData.user,
+        fxPortalDepositData.toAddress,
         fxPortalDepositData.tokenID,
         fxPortalDepositData.tokenURI,
         '0x',

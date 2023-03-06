@@ -3,10 +3,30 @@ import { ChainIDs } from './ChainIDs';
 export type FxPortalRootChainIDType = ChainIDs.MAINNET | ChainIDs.GOERLI;
 export type FxPortalChildChainIDType = ChainIDs.POLYGON | ChainIDs.MUMBAI;
 
-export enum FxPortal_TxType {
+export type FxPortalChainIDType =
+  | FxPortalRootChainIDType
+  | FxPortalChildChainIDType;
+
+export enum FxPortalTxType {
   DEPOSIT,
   WITHDRAW,
 }
+
+export const FxPortalRootToChildChainIDMap: Record<
+  FxPortalRootChainIDType,
+  FxPortalChildChainIDType
+> = {
+  [ChainIDs.MAINNET]: ChainIDs.POLYGON,
+  [ChainIDs.GOERLI]: ChainIDs.MUMBAI,
+};
+
+export const FxPortalChildToRootChainIDMap: Record<
+  FxPortalChildChainIDType,
+  FxPortalRootChainIDType
+> = {
+  [ChainIDs.POLYGON]: ChainIDs.MAINNET,
+  [ChainIDs.MUMBAI]: ChainIDs.GOERLI,
+};
 
 export const FxRootTunnelAddress: Record<FxPortalRootChainIDType, string> = {
   [ChainIDs.MAINNET]: '0x7857a53a3D280775987288cFeaF18b1143137392',

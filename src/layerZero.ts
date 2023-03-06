@@ -2,7 +2,12 @@ import { Contract, Signer, ethers } from 'ethers';
 import { SignerOrProvider } from './types';
 import ONFT_ABI from './abis/ONFT.json';
 import { LayerZeroSendNFTDTO } from './types/layerzero';
-import { LAYER_ZERO_ONFT_MAP, LzChainIDs } from './constants/layerZero';
+import {
+  LAYER_ZERO_ONFT_MAP,
+  LayerZeroRootChainIDType,
+  LzChainIDs,
+} from './constants/layerZero';
+import { isArbitrumChainID } from './function';
 
 export class LayerZero {
   //
@@ -19,10 +24,15 @@ export class LayerZero {
 
   async sendNFT(layerZeroSendNFTDTO: LayerZeroSendNFTDTO) {
     //
-    const onftAddress =
-      LAYER_ZERO_ONFT_MAP[layerZeroSendNFTDTO.srcChainID][
-        layerZeroSendNFTDTO.tokenAddress
-      ];
+    let onftAddress;
+    if (isArbitrumChainID(layerZeroSendNFTDTO.dstChainID)) {
+      onftAddress =
+        LAYER_ZERO_ONFT_MAP[
+          layerZeroSendNFTDTO.srcChainID as LayerZeroRootChainIDType
+        ][layerZeroSendNFTDTO.tokenAddress];
+    } else {
+      onftAddress = layerZeroSendNFTDTO.tokenAddress;
+    }
     //
     const onftInstance = new Contract(
       onftAddress,
