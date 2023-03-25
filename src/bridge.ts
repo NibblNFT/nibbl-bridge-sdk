@@ -80,6 +80,7 @@ export class Bridge {
       );
       return await fxPortal.withdraw({
         childToken: transferData.tokenAddress,
+        toAddress: transferData.toAddress,
         tokenID: transferData.tokenID,
       });
     }

@@ -18,5 +18,6 @@ export type FxPortalDepositDTO = {
 
 export type FxPortalWithdrawDTO = {
   childToken: string;
+  toAddress: string;
   tokenID: BigNumberish;
 };

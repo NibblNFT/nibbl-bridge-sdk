@@ -67,15 +67,17 @@ export class FxPortalERC721 {
   async withdraw(fxPortalWithdrawData: FxPortalWithdrawDTO) {
     try {
       const gasLimit = topupGas(
-        await this.childTunnelContract.estimateGas.withdraw(
+        await this.childTunnelContract.estimateGas.withdrawTo(
           fxPortalWithdrawData.childToken,
+          fxPortalWithdrawData.toAddress,
           fxPortalWithdrawData.tokenID,
           '0x'
         )
       );
       //
-      return await this.childTunnelContract.withdraw(
+      return await this.childTunnelContract.withdrawTo(
         fxPortalWithdrawData.childToken,
+        fxPortalWithdrawData.toAddress,
         fxPortalWithdrawData.tokenID,
         '0x',
         {
